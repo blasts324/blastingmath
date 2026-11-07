@@ -1,0 +1,14 @@
+{
+  "name": "subway-roller-unblocked",
+  "version": "1.0.0",
+  "description": "Subway Roller and 150 free browser games. Open index.html.",
+  "keywords": ["games", "html5", "browser-game", "endless-runner"],
+  "files": [
+    "index.html",
+    "css/",
+    "js/",
+    "img/favicon.svg",
+    "img/subway-roller.jpg",
+    "games/subway-roller/"
+  ]
+}

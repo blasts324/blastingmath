@@ -1,0 +1,13 @@
+# editor / app settings
+.claude/
+.vscode/
+Thumbs.db
+desktop.ini
+
+# games added locally with "Add Game.bat" stay on this computer
+games/custom/
+img/custom/
+
+# build output (rebuild with build.ps1)
+single-file.html
+single-file.svg

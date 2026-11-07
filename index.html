@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subway Roller Unblocked</title>
+<meta name="description" content="Play Subway Roller and 150 other free browser games. No downloads.">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="./">Subway Roller <small>unblocked</small></a>
+    <nav class="nav">
+      <a href="#featured">Subway Roller</a>
+      <a href="#games">All games</a>
+      <button type="button" id="randomBtn">Random game</button>
+    </nav>
+    <form class="search" role="search" onsubmit="return false">
+      <input id="q" type="search" placeholder="Search games..." autocomplete="off" aria-label="Search games">
+    </form>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <aside class="sidebar">
+    <div class="side-box">
+      <h4>Categories</h4>
+      <ul class="cat-list" id="cats"></ul>
+    </div>
+    <div class="side-box" id="recentWrap" hidden>
+      <h4>Recently played <button type="button" class="tiny" id="clearRecent">clear</button></h4>
+      <ul class="recent-list" id="recent"></ul>
+    </div>
+    <div class="side-box news">
+      <h4>What's new</h4>
+      <p><time datetime="2026-11-07">Nov 7</time> Subway Roller is up! Sparks save forever now, no coin timer.</p>
+      <p><time datetime="2026-11-07">Nov 7</time> Added 150 games to the list.</p>
+      <p class="hint">Tip: press <kbd>/</kbd> to search.</p>
+    </div>
+  </aside>
+
+  <main class="content">
+    <section id="featured" class="featured">
+      <div class="featured-top">
+        <h1>Subway Roller</h1>
+        <div class="featured-tools">
+          <button type="button" id="reloadFeatured">Restart</button>
+          <button type="button" id="fsFeatured">Fullscreen</button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <button type="button" class="cover" id="cover" aria-label="Play Subway Roller">
+          <img src="img/subway-roller.jpg" alt="">
+          <span class="cover-play">Play</span>
+        </button>
+        <iframe id="featuredFrame" title="Subway Roller" allow="autoplay; fullscreen; gamepad" allowfullscreen hidden></iframe>
+      </div>
+      <div class="about">
+        <div class="about-text">
+          <p>Roll down the rails as a little courier robot. Dodge trams, slide under gates, jump the barriers and grab as many sparks as you can. It gets faster the longer you last.</p>
+          <p>Your sparks save in your browser and never run out, so spend them on upgrades whenever you want. Magnet, Double Points and Shield all last longer as you level them.</p>
+        </div>
+        <table class="controls">
+          <caption>Controls</caption>
+          <tr><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd></td><td>change lane</td></tr>
+          <tr><td><kbd>&uarr;</kbd> / <kbd>space</kbd></td><td>jump</td></tr>
+          <tr><td><kbd>&darr;</kbd></td><td>slide (or slam down mid-air)</td></tr>
+          <tr><td><kbd>P</kbd></td><td>pause</td></tr>
+          <tr><td>phone</td><td>swipe</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="games" class="games">
+      <div class="games-top">
+        <h2 id="listTitle">All games</h2>
+        <span class="count" id="count"></span>
+        <label class="sort">Sort
+          <select id="sort">
+            <option value="new">Newest</option>
+            <option value="az">A to Z</option>
+          </select>
+        </label>
+      </div>
+      <div class="cat-strip" id="catStrip"></div>
+      <div class="grid" id="grid"></div>
+      <p class="empty" id="empty" hidden>Nothing found. Try another word?</p>
+    </section>
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Subway Roller was made for this site. The other games come from <a href="https://gamedistribution.com" target="_blank" rel="noopener">GameDistribution</a> and belong to their developers.</p>
+    <p><a href="#top" onclick="window.scrollTo(0,0);return false">Back to top</a></p>
+  </div>
+</footer>
+
+<div class="player" id="player" hidden>
+  <div class="player-bar">
+    <button type="button" id="closePlayer">&larr; Back</button>
+    <strong id="pTitle"></strong>
+    <span id="pCat"></span>
+    <button type="button" id="fsPlayer">Fullscreen</button>
+  </div>
+  <div class="player-stage"><iframe id="pFrame" title="Game" allow="autoplay; fullscreen; gamepad; clipboard-write" allowfullscreen></iframe></div>
+  <p class="player-desc" id="pDesc"></p>
+</div>
+
+<script src="js/games.js?raw"></script>
+<script src="js/app.js?raw"></script>
+</body>
+</html>
