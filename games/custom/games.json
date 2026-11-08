@@ -1,1 +1,4 @@
-[]
+[
+  {"id":"my-eagler-1-8","t":"Eagler 1.8","d":"","dir":"eagler-1-8","src":"games/custom/eagler-1-8/eaglercraft1-8-wasm.html","img":"img/custom/eagler-1-8.png"},
+  {"id":"my-eagler-26-2","t":"Eagler 26.2","d":"","dir":"eagler-26-2","src":"games/custom/eagler-26-2/eaglercraft-26.2-8c167d43.html","img":"img/custom/eagler-26-2.png"}
+]
