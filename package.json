@@ -1,7 +1,7 @@
 {
   "name": "blastingmath",
   "version": "1.0.0",
-  "description": "Subway Roller and 150 free browser games. Open index.html.",
+  "description": "Subway Roller and more free browser games that play right in the page. Open index.html.",
   "keywords": ["games", "html5", "browser-game", "endless-runner"],
   "files": [
     "index.html",
@@ -9,6 +9,8 @@
     "js/",
     "img/favicon.svg",
     "img/subway-roller.jpg",
-    "games/subway-roller/"
+    "img/play/",
+    "games/subway-roller/",
+    "games/play/"
   ]
 }

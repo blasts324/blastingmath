@@ -63,7 +63,14 @@ function Swap($old, $new) {
 Swap '<link rel="stylesheet" href="css/style.css">' ("<style>`n" + (Read-Text 'css\style.css') + '</style>')
 Swap "img/$slug.jpg" (DataUri "img\$slug.jpg" 'image/jpeg')
 Swap 'img/favicon.svg' (DataUri 'img\favicon.svg' 'image/svg+xml')
-Swap '<script src="js/games.js?raw"></script>' ('<script>' + (SafeJs (Read-Text 'js\games.js')) + '</script>')
+# game list: pictures packed in; the games themselves stay in games\play\ (keep single-file.html next to that folder)
+$gamesJs = [regex]::Replace((Read-Text 'js\games.js'), '"img":"(img/[^"]+)"', [Text.RegularExpressions.MatchEvaluator] {
+  param($m)
+  $rel = $m.Groups[1].Value -replace '/', '\'
+  if (-not (Test-Path (Join-Path $root $rel))) { return $m.Value }
+  '"img":"' + (DataUri $rel $mime[[IO.Path]::GetExtension($rel).ToLower()]) + '"'
+})
+Swap '<script src="js/games.js?raw"></script>' ('<script>' + (SafeJs $gamesJs) + '</script>')
 Swap '<script src="js/app.js?raw"></script>' ($loader + "`n" + (SafeJs $customScript).Replace('<\/script>', '</script>') + "`n<script>" + (SafeJs $app) + '</script>')
 
 $out = Join-Path $root 'single-file.html'

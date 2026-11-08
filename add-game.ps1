@@ -94,11 +94,41 @@ Say ''
 Say '  Add your own game' White
 Say '  -----------------' White
 if ($Zip) {
-  $zipPath = Check-File $Zip @('.zip')
-  if (-not $zipPath) { throw "Can't use '$Zip'. It has to be a .zip file." }
-  Say "  Game ZIP: $zipPath"
+  $zipPath = Check-File $Zip @('.zip', '.swf')
+  if (-not $zipPath) { throw "Can't use '$Zip'. It has to be a .zip or a Flash .swf file." }
+  Say "  Game file: $zipPath"
 } else {
-  $zipPath = Ask-File '  1) Drag the game ZIP into this window, then press Enter' @('.zip')
+  $zipPath = Ask-File '  1) Drag the game ZIP (or a Flash .swf) into this window, then press Enter' @('.zip', '.swf')
+}
+$isSwf = [IO.Path]::GetExtension($zipPath).ToLower() -eq '.swf'
+
+# Flash games get a small page that plays them with Ruffle (vendor\ruffle)
+function Write-FlashPage($dir, $swfRel, $title) {
+  $t = [Net.WebUtility]::HtmlEncode($title)
+  $swfUrl = (($swfRel -split '\\') | ForEach-Object { [Uri]::EscapeDataString($_) }) -join '/'
+  $page = @"
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>$t</title>
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}#game{width:100%;height:100%}</style>
+</head>
+<body>
+<div id="game"></div>
+<script>window.RufflePlayer = window.RufflePlayer || {}; window.RufflePlayer.config = { publicPath: '../../../vendor/ruffle/', autoplay: 'on', unmuteOverlay: 'hidden', splashScreen: false, letterbox: 'on' };</script>
+<script src="../../../vendor/ruffle/ruffle.js?raw"></script>
+<script>
+var player = window.RufflePlayer.newest().createPlayer();
+player.style.width = '100%'; player.style.height = '100%';
+document.getElementById('game').appendChild(player);
+(player.ruffle ? player.ruffle() : player).load('$swfUrl');
+</script>
+</body>
+</html>
+"@
+  [IO.File]::WriteAllText((Join-Path $dir 'index.html'), $page, $utf8)
 }
 
 if ($Name) { $Name = $Name.Trim() }
@@ -120,9 +150,13 @@ while ((Test-Path (Join-Path $customDir $slug)) -or ($script:list | Where-Object
 $dest = Join-Path $customDir $slug
 New-Item -ItemType Directory -Force $dest | Out-Null
 $destFull = [IO.Path]::GetFullPath($dest).TrimEnd('\') + '\'
-Say '  Unpacking...'
 try {
   $count = 0
+  if ($isSwf) {
+    Copy-Item -LiteralPath $zipPath (Join-Path $dest 'game.swf')
+    $count = 1
+  } else {
+  Say '  Unpacking...'
   $zf = [IO.Compression.ZipFile]::OpenRead($zipPath)
   try {
     foreach ($e in $zf.Entries) {
@@ -136,12 +170,24 @@ try {
     }
   } finally { $zf.Dispose() }
   if (-not $count) { throw 'That ZIP is empty.' }
+  }
+
+  $byDepth = { ($_.FullName.Substring($destFull.Length) -split '\\').Count }
+  $files = @(Get-ChildItem -LiteralPath $dest -Recurse -File | Sort-Object $byDepth, FullName)
+  # a Flash game (a .swf, or a ZIP with a .swf and no web page): make a Ruffle page for it
+  if (-not ($files | Where-Object { $_.Extension -in '.html', '.htm' })) {
+    $swf = $files | Where-Object { $_.Extension -eq '.swf' } | Select-Object -First 1
+    if ($swf) {
+      Write-FlashPage $dest $swf.FullName.Substring($destFull.Length) $Name
+      Say '  Flash game: it will play with Ruffle.'
+    }
+  }
 
   # find the page that starts the game: the shallowest index.html, else the only .html
   $htmls = @(Get-ChildItem -LiteralPath $dest -Recurse -File |
     Where-Object { $_.Extension -in '.html', '.htm' } |
-    Sort-Object { ($_.FullName.Substring($destFull.Length) -split '\\').Count }, FullName)
-  if (-not $htmls.Count) { throw "There's no .html file in that ZIP, so it isn't a web game the page can open." }
+    Sort-Object $byDepth, FullName)
+  if (-not $htmls.Count) { throw "There's no .html or .swf file in that ZIP, so it isn't a game the page can open." }
   $entry = $htmls | Where-Object { $_.Name -eq 'index.html' } | Select-Object -First 1
   if (-not $entry) {
     if ($htmls.Count -eq 1) { $entry = $htmls[0] }

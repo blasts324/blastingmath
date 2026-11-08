@@ -97,6 +97,12 @@ kbd{font:700 12px/1 Nunito,Verdana,sans-serif;background:var(--white);border:1px
 
 .site-footer{border-top:1px solid var(--line);color:var(--soft);font-size:13px;padding:18px 0 26px}
 .site-footer p{margin:4px 0}
+.credits{margin:8px 0}
+.credits summary{cursor:pointer;font-weight:700;color:var(--ink)}
+.credits ul{margin:6px 0 0;padding-left:18px}
+.credits li{margin:2px 0}
+.player-desc .by{display:block;margin-top:2px;opacity:.75}
+.player-desc a{color:#ffcc33}
 
 /* player */
 .player{position:fixed;inset:0;z-index:50;background:#120f22;display:flex;flex-direction:column}

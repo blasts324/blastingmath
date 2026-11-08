@@ -3,7 +3,7 @@
 const $ = s => document.querySelector(s);
 let GAMES = window.GAMES || [];
 let byId = {};
-const CATS = ['All', 'My Games', 'Action', 'Puzzle', 'Casual', 'Racing', 'Adventure', 'Sports', 'Strategy', '.IO'];
+let CATS = ['All']; // filled in from the games once they're loaded
 const FEATURED = { id: 'subway-roller', t: 'Subway Roller', src: window.FEATURED_SRC || 'games/subway-roller/index.html' }; // FEATURED_SRC is set in the single-file build
 const SITE = 'Subway Roller Unblocked';
 
@@ -12,8 +12,6 @@ const store = {
   set(k, v){ try { localStorage.setItem('hub.' + k, JSON.stringify(v)); } catch(e){} }
 };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const thumb = id => `https://img.gamedistribution.com/${id}-512x384.jpg`;
-const embedUrl = id => `https://html5.gamedistribution.com/${id}/?gd_sdk_referrer_url=${encodeURIComponent(location.href.split('#')[0])}`;
 
 /* ---------- game list ---------- */
 let cat = 'All', query = '', sort = 'new';
@@ -21,7 +19,7 @@ let counts = {};
 
 function tile(g){
   return `<button type="button" class="tile" data-id="${esc(g.id)}">
-    <img src="${esc(g.img || thumb(g.id))}" alt="" loading="lazy" decoding="async" data-l="${esc(g.t[0])}">
+    ${g.img ? `<img src="${esc(g.img)}" alt="" loading="lazy" decoding="async" data-l="${esc(g.t[0])}">` : `<span class="noimg">${esc(g.t[0])}</span>`}
     <strong>${esc(g.t)}</strong><small>${esc(g.c)}</small>
   </button>`;
 }
@@ -110,8 +108,9 @@ function openGame(id, fromHash){
     return playFeatured();
   }
   const g = byId[id]; if (!g) return;
-  $('#pTitle').textContent = g.t; $('#pCat').textContent = g.c; $('#pDesc').textContent = g.d;
-  pFrame.src = g.src || embedUrl(g.id);
+  $('#pTitle').textContent = g.t; $('#pCat').textContent = g.c;
+  $('#pDesc').innerHTML = esc(g.d) + (g.by ? ` <span class="by">By ${esc(g.by)} · ${esc(g.license)} · <a href="${esc(g.home)}" target="_blank" rel="noopener">source</a></span>` : '');
+  pFrame.src = g.src;
   player.hidden = false; document.body.style.overflow = 'hidden';
   pushRecent(id);
   document.title = g.t + ' - ' + SITE;
@@ -151,6 +150,12 @@ loadCustom().then(list => {
   GAMES = mine.concat(GAMES);
   byId = Object.fromEntries(GAMES.map(g => [g.id, g]));
   counts = GAMES.reduce((m, g) => (m[g.c] = (m[g.c] || 0) + 1, m), { All: GAMES.length });
+  const others = [...new Set(GAMES.map(g => g.c))].filter(c => c !== 'My Games').sort();
+  CATS = ['All'].concat(mine.length ? ['My Games'] : [], others);
+  $('#credits').innerHTML = GAMES.filter(g => g.by).map(g =>
+    `<li><b>${esc(g.t)}</b> by ${esc(g.by)}, ${esc(g.license)} (<a href="${esc(g.home)}" target="_blank" rel="noopener">source</a>)</li>`).join('') +
+    '<li><b>Ruffle</b> flash player, MIT / Apache-2.0 (<a href="https://github.com/ruffle-rs/ruffle" target="_blank" rel="noopener">source</a>)</li>' +
+    '<li><b>three.js</b>, MIT (<a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener">source</a>)</li>';
   renderCats(); renderGrid(); renderRecent(); fromHash();
 });
 })();

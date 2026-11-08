@@ -43,7 +43,7 @@ if ($newSlug -ne $oldSlug) {
 # Text in pages, scripts and styles (the game catalogue and three.js are left alone)
 $changed = @()
 Get-ChildItem -Path $root -Recurse -File -Include *.html, *.js, *.css, package.json |
-  Where-Object { $_.Name -notin @('three.min.js', 'games.js', 'single-file.html') -and $_.FullName -notlike '*\games\custom\*' } |
+  Where-Object { $_.Name -notin @('three.min.js', 'games.js', 'single-file.html') -and $_.FullName -notlike '*\games\custom\*' -and $_.FullName -notlike '*\games\play\*' -and $_.FullName -notlike '*\vendor\*' } |
   ForEach-Object {
     $t = Read-Text $_.FullName
     $before = $t
