@@ -152,8 +152,15 @@ loadCustom().then(list => {
   counts = GAMES.reduce((m, g) => (m[g.c] = (m[g.c] || 0) + 1, m), { All: GAMES.length });
   const others = [...new Set(GAMES.map(g => g.c))].filter(c => c !== 'My Games').sort();
   CATS = ['All'].concat(mine.length ? ['My Games'] : [], others);
-  $('#credits').innerHTML = GAMES.filter(g => g.by).map(g =>
-    `<li><b>${esc(g.t)}</b> by ${esc(g.by)}, ${esc(g.license)} (<a href="${esc(g.home)}" target="_blank" rel="noopener">source</a>)</li>`).join('') +
+  // one line per author/license, e.g. all of Flipline's games together
+  const groups = new Map();
+  GAMES.filter(g => g.by).forEach(g => {
+    const k = g.by + '|' + g.license + '|' + g.home;
+    if (!groups.has(k)) groups.set(k, { by: g.by, license: g.license, home: g.home, titles: [] });
+    groups.get(k).titles.push(g.t);
+  });
+  $('#credits').innerHTML = [...groups.values()].map(c =>
+    `<li><b>${c.titles.map(esc).join(', ')}</b> by ${esc(c.by)}, ${esc(c.license)} (<a href="${esc(c.home)}" target="_blank" rel="noopener">${c.home.includes('github.com') ? 'source' : 'website'}</a>)</li>`).join('') +
     '<li><b>Ruffle</b> flash player, MIT / Apache-2.0 (<a href="https://github.com/ruffle-rs/ruffle" target="_blank" rel="noopener">source</a>)</li>' +
     '<li><b>three.js</b>, MIT (<a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener">source</a>)</li>';
   renderCats(); renderGrid(); renderRecent(); fromHash();
