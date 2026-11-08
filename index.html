@@ -5,81 +5,164 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Subway Roller Unblocked</title>
 <meta name="description" content="Play Subway Roller and more free browser games right in the page. No downloads.">
+<meta name="theme-color" content="#050b1a">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="logo" href="./">Subway Roller <small>unblocked</small></a>
-    <nav class="nav">
-      <a href="#featured">Subway Roller</a>
-      <a href="#games">All games</a>
-      <button type="button" id="randomBtn">Random game</button>
-    </nav>
-    <form class="search" role="search" onsubmit="return false">
-      <input id="q" type="search" placeholder="Search games..." autocomplete="off" aria-label="Search games">
-    </form>
-  </div>
-</header>
+<div class="app">
+  <!-- left icon rail -->
+  <nav class="rail" aria-label="Main">
+    <button type="button" class="rail-btn" data-go="home" title="Home" aria-label="Home">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>
+    </button>
+    <button type="button" class="rail-btn" data-go="games" title="All games" aria-label="All games">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="5"/><path d="M6.5 12h4M8.5 10v4"/><path d="M15 11h.01M17.5 13.5h.01"/></svg>
+    </button>
+    <button type="button" class="rail-btn" data-go="cat:Flash" title="Flash games" aria-label="Flash games">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+    </button>
+    <button type="button" class="rail-btn" data-go="cat:My Games" title="My games" aria-label="My games">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/></svg>
+    </button>
+    <button type="button" class="rail-btn" data-go="cat:Recent" title="Recently played" aria-label="Recently played">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    </button>
+    <span class="rail-gap"></span>
+    <button type="button" class="rail-btn" data-go="random" title="Random game" aria-label="Random game">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 7h3c5 0 7 10 12 10h3"/><path d="M3 17h3c2 0 3-1.5 4-3.5"/><path d="M14 9.5C15 8 16.2 7 18 7h3"/><path d="m18 4 3 3-3 3"/><path d="m18 14 3 3-3 3"/></svg>
+    </button>
+    <button type="button" class="rail-btn" data-go="credits" title="Credits" aria-label="Credits">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg>
+    </button>
+  </nav>
 
-<div class="wrap layout">
-  <aside class="sidebar">
-    <div class="side-box">
-      <h4>Categories</h4>
-      <ul class="cat-list" id="cats"></ul>
-    </div>
-    <div class="side-box" id="recentWrap" hidden>
-      <h4>Recently played <button type="button" class="tiny" id="clearRecent">clear</button></h4>
-      <ul class="recent-list" id="recent"></ul>
-    </div>
-    <div class="side-box news">
-      <h4>What's new</h4>
-      <p><time datetime="2026-11-08">Nov 8</time> New game list: everything now plays right here on the page. Flash games work too.</p>
-      <p><time datetime="2026-11-07">Nov 7</time> Subway Roller is up! Sparks save forever now, no coin timer.</p>
-      <p class="hint">Tip: press <kbd>/</kbd> to search.</p>
-    </div>
-  </aside>
-
-  <main class="content">
-    <section id="featured" class="featured">
-      <div class="featured-top">
-        <h1>Subway Roller</h1>
-        <div class="featured-tools">
-          <button type="button" id="reloadFeatured">Restart</button>
-          <button type="button" id="fsFeatured">Fullscreen</button>
-        </div>
-      </div>
-      <div class="stage" id="stage">
-        <button type="button" class="cover" id="cover" aria-label="Play Subway Roller">
-          <img src="img/subway-roller.jpg" alt="">
-          <span class="cover-play">Play</span>
+  <div class="main">
+    <!-- top bar -->
+    <header class="topbar">
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab" data-go="home" role="tab">
+          <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Home
         </button>
-        <iframe id="featuredFrame" title="Subway Roller" allow="autoplay; fullscreen; gamepad" allowfullscreen hidden></iframe>
+        <button type="button" class="tab" data-go="games" role="tab">
+          <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="5"/><path d="M6.5 12h4M8.5 10v4"/></svg>Games
+        </button>
       </div>
-      <div class="about">
-        <div class="about-text">
-          <p>Roll down the rails as a little courier robot. Dodge trams, slide under gates, jump the barriers and grab as many sparks as you can. It gets faster the longer you last.</p>
-          <p>Your sparks save in your browser and never run out, so spend them on upgrades whenever you want. Magnet, Double Points and Shield all last longer as you level them.</p>
+      <form class="addr" role="search" onsubmit="return false">
+        <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <span class="addr-scheme" id="addrScheme">roller://home</span>
+        <input id="q" type="search" placeholder="Search games..." autocomplete="off" aria-label="Search games">
+        <kbd>/</kbd>
+      </form>
+      <div class="top-tools">
+        <button type="button" class="icon-btn" id="randomBtn" title="Random game" aria-label="Random game">
+          <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 7h3c5 0 7 10 12 10h3"/><path d="M3 17h3c2 0 3-1.5 4-3.5"/><path d="M14 9.5C15 8 16.2 7 18 7h3"/><path d="m18 4 3 3-3 3"/><path d="m18 14 3 3-3 3"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="fsPage" title="Full screen" aria-label="Full screen">
+          <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- home -->
+    <section class="view home" id="viewHome">
+      <div class="hero">
+        <div class="glow" aria-hidden="true"></div>
+        <h1 class="brand">Subway Roller</h1>
+        <p class="tagline">Free games, right in your browser. No downloads, no waiting.</p>
+
+        <form class="bigsearch" role="search" id="heroSearch" onsubmit="return false">
+          <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="hq" type="search" placeholder="Search for a game..." autocomplete="off" aria-label="Search for a game">
+          <button type="submit" class="go" aria-label="Search">
+            <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+
+        <div class="quick">
+          <button type="button" class="qa" data-go="featured">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span>Subway Roller
+          </button>
+          <button type="button" class="qa" data-go="games">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="5"/><path d="M6.5 12h4M8.5 10v4"/><path d="M15 11h.01M17.5 13.5h.01"/></svg></span>Games
+          </button>
+          <button type="button" class="qa" data-go="cat:Flash">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span>Flash
+          </button>
+          <button type="button" class="qa" data-go="cat:My Games" id="qaMine">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z"/></svg></span>My Games
+          </button>
+          <button type="button" class="qa" data-go="random">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 7h3c5 0 7 10 12 10h3"/><path d="M3 17h3c2 0 3-1.5 4-3.5"/><path d="M14 9.5C15 8 16.2 7 18 7h3"/><path d="m18 4 3 3-3 3"/><path d="m18 14 3 3-3 3"/></svg></span>Random
+          </button>
+          <button type="button" class="qa" data-go="cat:Recent">
+            <span class="qa-ic"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Recent
+          </button>
         </div>
-        <table class="controls">
-          <caption>Controls</caption>
-          <tr><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd></td><td>change lane</td></tr>
-          <tr><td><kbd>&uarr;</kbd> / <kbd>space</kbd></td><td>jump</td></tr>
-          <tr><td><kbd>&darr;</kbd></td><td>slide (or slam down mid-air)</td></tr>
-          <tr><td><kbd>P</kbd></td><td>pause</td></tr>
-          <tr><td>phone</td><td>swipe</td></tr>
-        </table>
+
+        <div class="pills">
+          <span class="pill"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="5"/><path d="M6.5 12h4M8.5 10v4"/></svg><b id="gameCount">0</b> games to play</span>
+          <span class="pill"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><b id="flashCount">0</b> Flash classics</span>
+          <span class="pill dim">Press <kbd>/</kbd> to search</span>
+        </div>
+
+        <div class="clock" aria-live="off">
+          <div class="clock-time" id="clockTime">--:--</div>
+          <div class="clock-date" id="clockDate"></div>
+        </div>
       </div>
+
+      <section class="block" id="featured">
+        <div class="feature">
+          <button type="button" class="feature-art" id="cover" aria-label="Play Subway Roller">
+            <img src="img/subway-roller.jpg" alt="">
+            <span class="play-badge"><svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>Play</span>
+          </button>
+          <div class="feature-text">
+            <span class="eyebrow">Featured</span>
+            <h2>Subway Roller</h2>
+            <p>Roll down the rails as a little courier robot. Dodge trams, slide under gates, jump the barriers and grab as many sparks as you can. It gets faster the longer you last.</p>
+            <p>Your sparks save in your browser and never run out, so spend them on upgrades whenever you want.</p>
+            <ul class="keys">
+              <li><kbd>&larr;</kbd><kbd>&rarr;</kbd> change lane</li>
+              <li><kbd>&uarr;</kbd><kbd>space</kbd> jump</li>
+              <li><kbd>&darr;</kbd> slide</li>
+              <li><kbd>P</kbd> pause</li>
+            </ul>
+            <button type="button" class="btn-primary" id="playFeatured">
+              <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg>Play now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" id="recentWrap" hidden>
+        <div class="block-head">
+          <h3>Jump back in</h3>
+          <button type="button" class="link-btn" id="clearRecent">Clear</button>
+        </div>
+        <div class="row" id="recent"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3>New to play</h3>
+          <button type="button" class="link-btn" data-go="games">See all games</button>
+        </div>
+        <div class="grid" id="homeGrid"></div>
+      </section>
     </section>
 
-    <section id="games" class="games">
-      <div class="games-top">
-        <h2 id="listTitle">All games</h2>
-        <span class="count" id="count"></span>
+    <!-- all games -->
+    <section class="view" id="viewGames" hidden>
+      <div class="games-head">
+        <div>
+          <h2 id="listTitle">All games</h2>
+          <span class="count" id="count"></span>
+        </div>
         <label class="sort">Sort
           <select id="sort">
             <option value="new">Newest</option>
@@ -87,30 +170,36 @@
           </select>
         </label>
       </div>
-      <div class="cat-strip" id="catStrip"></div>
+      <div class="chips" id="catStrip"></div>
       <div class="grid" id="grid"></div>
-      <p class="empty" id="empty" hidden>Nothing found. Try another word?</p>
+      <p class="empty" id="empty" hidden>Nothing here yet. Try another word or category.</p>
     </section>
-  </main>
+
+    <footer class="foot" id="creditsBox">
+      <p>Subway Roller was made for this site. The other games are open source or shared by their makers, and hosted here under their licenses. Flash games play through <a href="https://ruffle.rs" target="_blank" rel="noopener">Ruffle</a>.</p>
+      <details class="credits" id="creditsDetails">
+        <summary>Game credits</summary>
+        <ul id="credits"></ul>
+      </details>
+    </footer>
+  </div>
 </div>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Subway Roller was made for this site. The other games are open source and hosted here under their licenses. Flash games play through <a href="https://ruffle.rs" target="_blank" rel="noopener">Ruffle</a>.</p>
-    <details class="credits">
-      <summary>Game credits</summary>
-      <ul id="credits"></ul>
-    </details>
-    <p><a href="#top" onclick="window.scrollTo(0,0);return false">Back to top</a></p>
-  </div>
-</footer>
-
+<!-- game player -->
 <div class="player" id="player" hidden>
   <div class="player-bar">
-    <button type="button" id="closePlayer">&larr; Back</button>
+    <button type="button" class="pbtn" id="closePlayer">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back
+    </button>
     <strong id="pTitle"></strong>
-    <span id="pCat"></span>
-    <button type="button" id="fsPlayer">Fullscreen</button>
+    <span class="pcat" id="pCat"></span>
+    <span class="pspace"></span>
+    <button type="button" class="pbtn" id="reloadPlayer" title="Restart" aria-label="Restart">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+    </button>
+    <button type="button" class="pbtn" id="fsPlayer">
+      <svg class="ic" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Fullscreen
+    </button>
   </div>
   <div class="player-stage"><iframe id="pFrame" title="Game" allow="autoplay; fullscreen; gamepad; clipboard-write" allowfullscreen></iframe></div>
   <p class="player-desc" id="pDesc"></p>

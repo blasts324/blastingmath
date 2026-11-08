@@ -7,7 +7,12 @@ desktop.ini
 # build output (rebuild with build.ps1)
 single-file.html
 single-file.svg
+.svg-cache/
+npm/
 
 # kept on this PC only
 build-svg.ps1
+build-npm.ps1
+npm-publish.ps1
+NPM-PUBLISH.bat
 games/custom/games.local.json

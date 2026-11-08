@@ -79,27 +79,35 @@ Then open http://localhost:4517 in your browser. Press `Ctrl+C` in that window t
 
 ## 4. Add or remove a game
 
-**Add:** double-click **`Add Game.bat`** (or drag a ZIP onto it). It asks for:
+**Add:** double-click **`Add Game.bat`**, or drag game files onto it. A game is a **ZIP** of a web
+game (with an `index.html`, or another `.html` file) or a Flash **`.swf`** (a ZIP with a `.swf` and
+no web page works too).
 
-1. the game: a **ZIP** of a web game (with an `index.html`, or another `.html` file), or a Flash **`.swf`**
-   (a ZIP with a `.swf` and no web page works too),
-2. the game's **name**,
-3. a **picture** for its tile (PNG, JPG, WEBP or GIF).
+- **One game:** it asks for the name (Enter keeps the name from the file name) and a picture for
+  its tile (PNG, JPG, WEBP or GIF; Enter for none).
+- **Lots of games at once:** drag several files, or a whole folder of them, onto `Add Game.bat`
+  (or into its window). It lists them and asks once: **Y** adds them all, **R** lets you rename
+  some first. Names come from the file names (`bloons-tower-defense-5.swf` becomes
+  "Bloons Tower Defense 5"), and a picture with the same name next to a game is used
+  (`game.zip` + `game.png`). Games without a picture show their first letter.
+  Games already added under the same name are skipped, and one broken game doesn't stop the rest.
 
-It unpacks the game into `games\custom\<name>\`, copies the picture to `img\custom\`, adds it to
-`games\custom\games.json` (the "My Games" category) and rebuilds the one-file versions.
-Flash games get a page that uses the Goofle loading screen and Ruffle automatically.
+Each game is unpacked into `games\custom\<name>\`, its picture copied to `img\custom\`, and it's
+added to `games\custom\games.json` (the "My Games" category). The one-file versions are rebuilt
+once at the end. Flash games get a page that uses the Goofle loading screen and Ruffle.
 
-From a terminal you can skip the questions:
+From a terminal:
 
 ```bash
 powershell -ExecutionPolicy Bypass -File add-game.ps1 "C:\path\game.zip" -Name "My Game" -Image "C:\path\cover.png"
+powershell -ExecutionPolicy Bypass -File add-game.ps1 "C:\games\a.zip" "C:\games\b.swf" "C:\a folder of games"
 ```
 
 Add `-Local` to keep a game **on this PC only**: it goes in `games.local.json`, git ignores it,
 and it is never pushed to GitHub or published to npm.
 
-**Remove:** double-click **`Remove Game.bat`** and pick the number of the game.
+**Remove:** double-click **`Remove Game.bat`** and type the number of the game, or several:
+`1,4,7` or `2-5`.
 
 Only add games you're allowed to share: added games go on the public website and into the
 npm packages.

@@ -44,7 +44,7 @@ $mime = @{ '.png' = 'image/png'; '.jpg' = 'image/jpeg'; '.jpeg' = 'image/jpeg'; 
 $blobs = @(); $linked = @()
 foreach ($g in $custom) {
   $imgRel = $g.img -replace '/', '\'
-  if (Test-Path (Join-Path $root $imgRel)) { $g.img = DataUri $imgRel $mime[[IO.Path]::GetExtension($imgRel).ToLower()] }
+  if ($g.img -and (Test-Path (Join-Path $root $imgRel) -PathType Leaf)) { $g.img = DataUri $imgRel $mime[[IO.Path]::GetExtension($imgRel).ToLower()] }
   $dir = Join-Path $root "games\custom\$($g.dir)"
   $files = @(Get-ChildItem -LiteralPath $dir -Recurse -File -ErrorAction SilentlyContinue)
   if ($files.Count -eq 1 -and $files[0].Extension -in '.html', '.htm') {
