@@ -7,14 +7,20 @@
   Remove a game you added:
     powershell -ExecutionPolicy Bypass -File add-game.ps1 -Remove
 
-  The ZIP has to contain a web game: an index.html (or another .html file).
-  Games go in games\custom\, pictures in img\custom\, and the list in games\custom\games.json.
+  The ZIP has to contain a web game: an index.html (or another .html file), or a Flash .swf.
+  Games go in games\custom\, pictures in img\custom\.
+
+  Added games are part of the website: double-click "PUSH REPO.bat" to send them to GitHub,
+  and GitHub Pages puts them live a minute or two later.
+    -Local   keep this game on this PC only (listed in games\custom\games.local.json,
+             kept out of git through .gitignore)
 #>
 param(
   [Parameter(Position = 0)][string]$Zip,
   [string]$Name,
   [string]$Image,
-  [switch]$Remove
+  [switch]$Remove,
+  [switch]$Local
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -22,7 +28,8 @@ $root = $PSScriptRoot
 $utf8 = New-Object System.Text.UTF8Encoding $false
 $customDir = Join-Path $root 'games\custom'
 $imgDir = Join-Path $root 'img\custom'
-$listFile = Join-Path $customDir 'games.json'
+$listFile = Join-Path $customDir 'games.json'          # on the website
+$localFile = Join-Path $customDir 'games.local.json'   # only on this PC
 $imgExts = @('.png', '.jpg', '.jpeg', '.webp', '.gif')
 
 function Say($msg, $color = 'Gray') { Write-Host $msg -ForegroundColor $color }
@@ -46,17 +53,42 @@ function Ask-File($prompt, $exts) {
   }
 }
 
+# every added game, from both lists; .local says which list it lives in
 $script:list = @()
-if (Test-Path $listFile) {
-  $raw = [IO.File]::ReadAllText($listFile, [Text.Encoding]::UTF8)
-  if ($raw.Trim()) { foreach ($g in (ConvertFrom-Json $raw)) { $script:list += $g } }
+foreach ($pair in @(@($listFile, $false), @($localFile, $true))) {
+  if (Test-Path $pair[0]) {
+    $raw = [IO.File]::ReadAllText($pair[0], [Text.Encoding]::UTF8)
+    if ($raw.Trim()) {
+      foreach ($g in (ConvertFrom-Json $raw)) {
+        $g | Add-Member -NotePropertyName local -NotePropertyValue $pair[1] -Force
+        $script:list += $g
+      }
+    }
+  }
+}
+function Write-List($file, $items) {
+  $lines = @($items | ForEach-Object { ConvertTo-Json -InputObject ($_ | Select-Object id, t, d, dir, src, img) -Compress })
+  $json = if ($lines.Count) { "[`n  " + ($lines -join ",`n  ") + "`n]" } else { '[]' }
+  [IO.File]::WriteAllText($file, $json, $utf8)
 }
 function Save-List {
   New-Item -ItemType Directory -Force $customDir | Out-Null
-  $items = @($script:list | ForEach-Object { ConvertTo-Json -InputObject $_ -Compress })
-  $json = if ($items.Count) { "[`n  " + ($items -join ",`n  ") + "`n]" } else { '[]' }
-  [IO.File]::WriteAllText($listFile, $json, $utf8)
+  $local = @($script:list | Where-Object { $_.local })
+  Write-List $listFile @($script:list | Where-Object { -not $_.local })
+  Write-List $localFile $local
+  # keep local-only games out of git: rewrite the managed block in git's private exclude
+  # file (.git\info\exclude), which works like .gitignore but never gets pushed
+  $gi = Join-Path $root '.git\info\exclude'
+  if (-not (Test-Path (Join-Path $root '.git'))) { $gi = Join-Path $root '.gitignore' }
+  New-Item -ItemType Directory -Force (Split-Path $gi) | Out-Null
+  $start = '# local-only games (managed by add-game.ps1)'; $end = '# end of local-only games'
+  $text = if (Test-Path $gi) { [IO.File]::ReadAllText($gi) } else { '' }
+  $text = [regex]::Replace($text, '(?s)\r?\n?' + [regex]::Escape($start) + '.*?' + [regex]::Escape($end) + '\r?\n?', "`n")
+  $block = @($start, 'games/custom/games.local.json') +
+    @($local | ForEach-Object { "games/custom/$($_.dir)/"; ($_.img -replace '^img/custom/', 'img/custom/') }) + @($end)
+  [IO.File]::WriteAllText($gi, $text.TrimEnd() + "`n`n" + ($block -join "`n") + "`n", $utf8)
 }
+function Push-Hint { Say '  To put it on the website, double-click "PUSH REPO.bat".' White }
 function Rebuild {
   $build = Join-Path $root 'build.ps1'
   if (Test-Path $build) { Say ''; & $build }
@@ -85,6 +117,7 @@ if ($Remove) {
   $script:list = @($script:list | Where-Object { $_.id -ne $pick.id })
   Save-List
   Say "Removed '$($pick.t)'." Green
+  if (-not $pick.local) { Push-Hint }
   Rebuild
   exit 0
 }
@@ -210,10 +243,13 @@ $script:list += [pscustomobject]@{
   dir = $slug
   src = "games/custom/$slug/$rel"
   img = "img/custom/$slug$ext"
+  local = [bool]$Local
 }
 Save-List
 
 Say ''
 Say "  Added '$Name' ($count files)." Green
 Say "  It's in the 'My Games' section. Refresh the page to see it."
+if ($Local) { Say '  Kept on this PC only (-Local).' }
+else { Push-Hint }
 Rebuild

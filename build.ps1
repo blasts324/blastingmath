@@ -33,10 +33,12 @@ $loader = "<script>(function(){var b=atob('$gameB64'),u=new Uint8Array(b.length)
 #    Pictures are packed in. A game that is one single .html file is packed in too;
 #    games made of many files are linked from games\custom\ (keep single-file.html next to that folder).
 $custom = @()
-$listFile = Join-Path $root 'games\custom\games.json'
-if (Test-Path $listFile) {
-  $raw = [IO.File]::ReadAllText($listFile, [Text.Encoding]::UTF8)
-  if ($raw.Trim()) { foreach ($g in (ConvertFrom-Json $raw)) { $custom += $g } }
+foreach ($listName in 'games.json', 'games.local.json') {  # website list + this PC's local-only list
+  $listFile = Join-Path $root "games\custom\$listName"
+  if (Test-Path $listFile) {
+    $raw = [IO.File]::ReadAllText($listFile, [Text.Encoding]::UTF8)
+    if ($raw.Trim()) { foreach ($g in (ConvertFrom-Json $raw)) { $custom += $g } }
+  }
 }
 $mime = @{ '.png' = 'image/png'; '.jpg' = 'image/jpeg'; '.jpeg' = 'image/jpeg'; '.webp' = 'image/webp'; '.gif' = 'image/gif' }
 $blobs = @(); $linked = @()

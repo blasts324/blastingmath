@@ -139,9 +139,12 @@ window.addEventListener('popstate', fromHash);
 /* ---------- your own games (added with "Add Game.bat") ---------- */
 function loadCustom(){
   if (window.CUSTOM_GAMES) return Promise.resolve(window.CUSTOM_GAMES); // the single-file build has them inside
-  return fetch('games/custom/games.json', { cache: 'no-store' })
+  // games.json is on the website; games.local.json only exists on the PC they were added on
+  const get = f => fetch('games/custom/' + f, { cache: 'no-store' })
     .then(r => r.ok ? r.json() : [])
     .catch(() => []);
+  return Promise.all([get('games.json'), get('games.local.json')]).then(([web, local]) =>
+    [].concat(Array.isArray(web) ? web : [], Array.isArray(local) ? local : []));
 }
 loadCustom().then(list => {
   const mine = (Array.isArray(list) ? list : []).map(g => ({

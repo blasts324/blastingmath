@@ -4,10 +4,10 @@
 Thumbs.db
 desktop.ini
 
-# games added locally with "Add Game.bat" stay on this computer
-games/custom/
-img/custom/
-
 # build output (rebuild with build.ps1)
 single-file.html
 single-file.svg
+
+# kept on this PC only
+build-svg.ps1
+games/custom/games.local.json
